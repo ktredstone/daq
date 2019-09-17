@@ -48,7 +48,6 @@ class DAQ:
         # pylint: disable=protected-access
         minilog.MininetLogger._log = _stripped_alt_logger
 
-
 def _stripped_alt_logger(self, level, msg, *args, **kwargs):
     # pylint: disable=unused-argument
     """A logger for messages that strips whitespace"""
