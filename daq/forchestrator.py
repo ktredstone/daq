@@ -49,6 +49,6 @@ class Forchestrator:
 
 if __name__ == '__main__':
     CONFIG = configurator.Configurator()
-    forch = Forchestrator(CONFIG.parse_args(sys.argv))
-    forch.initialize()
-    forch.main_loop()
+    FORCH = Forchestrator(CONFIG.parse_args(sys.argv))
+    FORCH.initialize()
+    FORCH.main_loop()
