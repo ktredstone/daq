@@ -24,6 +24,7 @@ class Forchestrator:
         self._faucet_events.connect()
 
     def main_loop(self):
+        """Main event processing loop"""
         LOGGER.info('Entering main event loop...')
         while self._handle_faucet_events():
             pass
