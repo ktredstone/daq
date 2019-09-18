@@ -2,6 +2,7 @@
 
 import logging
 import http.server
+import json
 import socketserver
 import sys
 import threading
@@ -16,6 +17,8 @@ LOGGER = logging.getLogger('forch')
 class Forchestrator:
     """Main class encompassing faucet orchestrator components for dynamically
     controlling faucet ACLs at runtime"""
+
+    _TOPOLOGY_FILE = 'inst/dp_graph.json'
 
     def __init__(self, config):
         self._config = config
@@ -57,6 +60,10 @@ class Forchestrator:
             'params': params
         }
 
+    def get_topology(self, params):
+        with open(self._TOPOLOGY_FILE, 'r') as in_file:
+            return json.load(in_file)
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
@@ -65,5 +72,6 @@ if __name__ == '__main__':
     FORCH.initialize()
     HTTP = http_server.HttpServer(CONFIG)
     HTTP.map_request('overview', FORCH.get_overview)
+    HTTP.map_request('topology', FORCH.get_topology)
     HTTP.start_server()
     FORCH.main_loop()
