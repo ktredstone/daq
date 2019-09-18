@@ -1,13 +1,30 @@
 """Orchestrator component for controlling a Faucet SDN"""
 
+import http.server
 import logging
+import socketserver
 import sys
+import threading
 
 import faucet_event_client
 import configurator
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger('forch')
+
+
+class RequestHandler(http.server.BaseHTTPRequestHandler):
+
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        message = threading.currentThread().getName() + '\n'
+        self.wfile.write(message.encode())
+
+
+class ThreadedHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
+    """Handle requests in a separate thread."""
+
 
 class Forchestrator:
     """Main class encompassing faucet orchestrator components for dynamically
@@ -16,6 +33,7 @@ class Forchestrator:
     def __init__(self, config):
         self._config = config
         self._faucet_events = None
+        self._server = None
 
     def initialize(self):
         """Initialize forchestrator instance"""
@@ -46,9 +64,22 @@ class Forchestrator:
                 LOGGER.info('DP restart %d %s', dpid, restart_type)
         return False
 
+    def start_server(self):
+        """Start serving thread"""
+        address=('0.0.0.0', 9019)
+        LOGGER.info('Starting http server on %s', address)
+        self._server = ThreadedHTTPServer(address, RequestHandler)
+
+        thread = threading.Thread(target = self._server.serve_forever)
+        thread.deamon = False
+        thread.start()
+
+
 
 if __name__ == '__main__':
     CONFIG = configurator.Configurator()
     FORCH = Forchestrator(CONFIG.parse_args(sys.argv))
     FORCH.initialize()
+    FORCH.start_server()
     FORCH.main_loop()
+    LOGGER.info('Forchestrating...')
