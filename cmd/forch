@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-export FAUCET_EVENT_SOCK=inst/faucet_event.sock
+SOCK=inst/faucet_event.sock
 
-source venv/bin/activate
-
-sudo FAUCET_EVENT_SOCK=$FAUCET_EVENT_SOCK python3 daq/forchestrator.py
+sudo FAUCET_EVENT_SOCK=$SOCK venv/bin/python daq/forchestrator.py
