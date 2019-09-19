@@ -6,7 +6,6 @@ import json
 import logging
 import os
 import socketserver
-import sys
 import threading
 import urllib
 
@@ -25,7 +24,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         self._context = context
         super().__init__(*args, **kwargs)
 
-    # pylint: disable=snake-case
+    # pylint: disable=invalid-name
     def do_GET(self):
         """Handle a basic http request get method"""
         self.send_response(200)
@@ -48,6 +47,7 @@ class HttpServer():
     def __init__(self, config):
         self._config = config
         self._paths = {}
+        self._server = None
         self._root_path = config.get('http_root', 'forch_public')
 
     def start_server(self):
