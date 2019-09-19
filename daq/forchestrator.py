@@ -3,10 +3,12 @@
 import json
 import logging
 import sys
+import time
 
 import configurator
 import faucet_event_client
 import http_server
+from faucet_states_collector import FaucetStatesCollector
 
 LOGGER = logging.getLogger('forch')
 
@@ -21,6 +23,7 @@ class Forchestrator:
         self._config = config
         self._faucet_events = None
         self._server = None
+        self._faucet_states_collector = FaucetStatesCollector()
 
     def initialize(self):
         """Initialize forchestrator instance"""
@@ -40,15 +43,24 @@ class Forchestrator:
             LOGGER.debug('Faucet event %s', event)
             if not event:
                 return True
+
+            timestamp = event.get("timestamp", time.time())
+
             (dpid, port, active) = self._faucet_events.as_port_state(event)
             if dpid and port:
                 LOGGER.info('Port state %s %s %s', dpid, port, active)
+                self._faucet_states_collector.process_port_state(dpid, port, active, timestamp)
+
             (dpid, port, target_mac) = self._faucet_events.as_port_learn(event)
             if dpid and port:
                 LOGGER.info('Port learn %s %s %s', dpid, port, target_mac)
+                self._faucet_states_collector.process_port_learn(dpid, port, target_mac, timestamp)
+
             (dpid, restart_type) = self._faucet_events.as_config_change(event)
             if dpid is not None:
                 LOGGER.info('DP restart %d %s', dpid, restart_type)
+                self._faucet_states_collector.process_config_change(dpid, restart_type, timestamp)
+
         return False
 
     def get_overview(self, path, params):
