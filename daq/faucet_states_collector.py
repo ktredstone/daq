@@ -28,7 +28,7 @@ class FaucetStatesCollector:
         self.system_states = {FaucetStatesCollector.TABLE_ENTRY_SWITCH: {}}
         self.switch_states = self.system_states[FaucetStatesCollector.TABLE_ENTRY_SWITCH]
 
-    def get_switches():
+    def get_switches(self):
         return self.system_states
 
     @save_states
