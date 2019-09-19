@@ -2,6 +2,7 @@
 
 import functools
 import http.server
+import json
 import logging
 import os
 import socketserver
@@ -70,7 +71,8 @@ class HttpServer():
             for a_path in self._paths:
                 if path.startswith(a_path):
                     path_remain = path[len(a_path):]
-                    return str(self._paths[a_path](path_remain, opts))
+                    result = self._paths[a_path](path_remain, opts)
+                    return result if isinstance(result, str) else json.dumps(result)
             return str(self._paths)
         except Exception as e:
             LOGGER.error('Handling request %s: %s', path, str(e))
