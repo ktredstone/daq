@@ -69,6 +69,7 @@ if __name__ == '__main__':
     FORCH = Forchestrator(CONFIG)
     FORCH.initialize()
     HTTP = http_server.HttpServer(CONFIG)
+    HTTP.map_request('', HTTP.static_file('index.html'))
     HTTP.map_request('overview', FORCH.get_overview)
     HTTP.map_request('topology', FORCH.get_topology)
     HTTP.start_server()

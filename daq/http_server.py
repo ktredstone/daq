@@ -3,6 +3,7 @@
 import functools
 import http.server
 import logging
+import os
 import socketserver
 import sys
 import threading
@@ -44,6 +45,7 @@ class HttpServer():
     def __init__(self, config):
         self._config = config
         self._paths = {}
+        self._root_path = config.get('http_root', 'forch_public')
 
     def start_server(self):
         """Start serving thread"""
@@ -69,3 +71,11 @@ class HttpServer():
         except Exception as e:
             LOGGER.error('Handling request %s: %s', path, str(e))
             return str(e)
+
+    def read_file(self, path):
+        full_path = os.path.join(self._root_path, path)
+        with open(full_path, 'r') as in_file:
+            return in_file.read()
+
+    def static_file(self, path):
+        return lambda params: self.read_file(path)
