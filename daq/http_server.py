@@ -42,6 +42,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 class HttpServer():
     """Simple http server for managing simple requests"""
 
+    _DEFAULT_FILE = 'index.html'
+
     def __init__(self, config):
         self._config = config
         self._paths = {}
@@ -65,17 +67,23 @@ class HttpServer():
     def get_data(self, path, opts):
         """Get data for a particular path"""
         try:
-            if path in self._paths:
-                return self._paths[path](opts)
+            for a_path in self._paths:
+                if path.startswith(a_path):
+                    path_remain = path[len(a_path):]
+                    return str(self._paths[a_path](path_remain, opts))
             return str(self._paths)
         except Exception as e:
             LOGGER.error('Handling request %s: %s', path, str(e))
             return str(e)
 
-    def read_file(self, path):
+    def read_file(self, path, ext_path):
         full_path = os.path.join(self._root_path, path)
+        if ext_path:
+            full_path = os.path.join(full_path, ext_path)
+        if os.path.isdir(full_path):
+            full_path = os.path.join(full_path, self._DEFAULT_FILE)
         with open(full_path, 'r') as in_file:
             return in_file.read()
 
     def static_file(self, path):
-        return lambda params: self.read_file(path)
+        return lambda path_remain, params: self.read_file(path, path_remain)
