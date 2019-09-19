@@ -70,6 +70,10 @@ class Forchestrator:
             'params': params
         }
 
+    def get_switches(self, path, params):
+        """Get the state of the switches"""
+        return self._faucet_states_collector.get_switches()
+
     def get_topology(self, path, params):
         """Get the network topology overview"""
         with open(self._TOPOLOGY_FILE, 'r') as in_file:
@@ -84,6 +88,7 @@ if __name__ == '__main__':
     HTTP = http_server.HttpServer(CONFIG)
     HTTP.map_request('overview', FORCH.get_overview)
     HTTP.map_request('topology', FORCH.get_topology)
+    HTTP.map_request('switches', FORCH.get_switches)
     HTTP.map_request('', HTTP.static_file(''))
     HTTP.start_server()
     FORCH.main_loop()

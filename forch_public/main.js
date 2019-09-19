@@ -29,4 +29,5 @@ function initialize() {
   const viewer = load_viewer();
   fetch_data(viewer, 'overview', 'overview')
   fetch_data(viewer, 'topology', 'topology')
+  fetch_data(viewer, 'switches', 'switches')
 }
