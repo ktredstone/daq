@@ -59,6 +59,7 @@ class Forchestrator:
         }
 
     def get_topology(self, path, params):
+        """Get the network topology overview"""
         with open(self._TOPOLOGY_FILE, 'r') as in_file:
             return json.load(in_file)
 
