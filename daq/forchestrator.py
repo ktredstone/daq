@@ -43,7 +43,7 @@ class Forchestrator:
             if not event:
                 return True
 
-            LOGGER.info('Faucet event %s', event)
+            LOGGER.debug('Faucet event %s', event)
             timestamp = event.get("timestamp", time.time())
 
             (dpid, port, active) = self._faucet_events.as_port_state(event)
