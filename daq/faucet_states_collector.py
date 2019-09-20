@@ -23,7 +23,6 @@ class FaucetStatesCollector:
     TABLE_ENTRY_CONFIG_CHANGE_COUNT = "change_count"
     TABLE_ENTRY_LAST_RESTART_TYPE = "last_restart"
     TABLE_ENTRY_LAST_RESTART_TS = "last_restart_timestamp"
-    TABLE_ENTRY
 
     def __init__(self):
         self.system_states = {FaucetStatesCollector.TABLE_ENTRY_SWITCH: {}}

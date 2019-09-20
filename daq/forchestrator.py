@@ -17,7 +17,7 @@ class Forchestrator:
     """Main class encompassing faucet orchestrator components for dynamically
     controlling faucet ACLs at runtime"""
 
-    _TOPOLOGY_FILE = 'inst/faucet/daq-faucet-1/dp_graph.json'
+    _TOPOLOGY_FILE = 'inst/dp_graph.json'
 
     def __init__(self, config):
         self._config = config
