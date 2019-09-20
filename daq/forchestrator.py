@@ -17,7 +17,7 @@ class Forchestrator:
     """Main class encompassing faucet orchestrator components for dynamically
     controlling faucet ACLs at runtime"""
 
-    _TOPOLOGY_FILE = 'inst/dp_graph.json'
+    _TOPOLOGY_FILE = 'inst/faucet/daq-faucet-1/dp_graph.json'
 
     def __init__(self, config):
         self._config = config
@@ -40,10 +40,10 @@ class Forchestrator:
     def _handle_faucet_events(self):
         while self._faucet_events:
             event = self._faucet_events.next_event()
-            LOGGER.debug('Faucet event %s', event)
             if not event:
                 return True
 
+            LOGGER.info('Faucet event %s', event)
             timestamp = event.get("timestamp", time.time())
 
             (dpid, port, active) = self._faucet_events.as_port_state(event)
@@ -60,6 +60,12 @@ class Forchestrator:
             if dpid is not None:
                 LOGGER.info('DP restart %d %s', dpid, restart_type)
                 self._faucet_states_collector.process_config_change(dpid, restart_type, timestamp)
+
+            (stack_root, graph) = self._faucet_events.as_stack_topo_change(event)
+            if stack_root is not None:
+                LOGGER.info('stack topology change root:%s graph:%s', stack_root, graph)
+                self._faucet_states_collector.process_stack_topo_change(stack_root, graph, timestamp)
+
 
         return False
 

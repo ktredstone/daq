@@ -23,6 +23,7 @@ class FaucetStatesCollector:
     TABLE_ENTRY_CONFIG_CHANGE_COUNT = "change_count"
     TABLE_ENTRY_LAST_RESTART_TYPE = "last_restart"
     TABLE_ENTRY_LAST_RESTART_TS = "last_restart_timestamp"
+    TABLE_ENTRY
 
     def __init__(self):
         self.system_states = {FaucetStatesCollector.TABLE_ENTRY_SWITCH: {}}
@@ -64,3 +65,8 @@ class FaucetStatesCollector:
         config_change_table[FaucetStatesCollector.TABLE_ENTRY_LAST_RESTART_TS] = datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
         config_change_table[FaucetStatesCollector.TABLE_ENTRY_CONFIG_CHANGE_COUNT] =\
             config_change_table.setdefault(FaucetStatesCollector.TABLE_ENTRY_CONFIG_CHANGE_COUNT, 0) + 1
+
+    @save_states
+    def process_stack_topo_change(self, stack_root, graph, timestamp):
+        return
+

@@ -189,6 +189,14 @@ class FaucetEventClient():
         eth_src = event['L2_LEARN']['eth_src']
         return (dpid, port_no, eth_src)
 
+    def as_stack_topo_change(self, event):
+        """Convert to port learning info, if applicable"""
+        if not event or 'STACK_TOPO_CHANGE' not in event:
+            return (None, None)
+        root = event['STACK_TOPO_CHANGE']['stack_root']
+        graph = event['STACK_TOPO_CHANGE']['graph']
+        return (root, graph)
+
     def close(self):
         """Close the faucet event socket"""
         self.sock.close()
