@@ -134,6 +134,8 @@ if [ -d faucet ]; then
     echo faucet already installed, faucet version $(cd faucet; git rev-list -n 1 HEAD)
 elif [ -z "$FAUCETV" ]; then
     echo No faucet version found, skipping.
+elif [ -z "$FAUCETR" ]; then
+    echo No faucet repo defined, skipping.
 else
     echo Cloning $FAUCETR...
     git clone $FAUCETR faucet
