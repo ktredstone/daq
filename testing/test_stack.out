@@ -1,4 +1,6 @@
 Running testing/test_stack.sh
+Lint checks
+cmd/inbuild exit code 0
 Generator tests
 Stacking Tests
 Testing stack mode bond
