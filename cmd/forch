@@ -2,11 +2,10 @@
 
 echo Script name: "$0"
 
-if [ -z "$1" ]
-then 
+if [ -z "$1" ];then 
     SOCK=inst/faucet_event.sock
 else
-    SOCK=$1
+    SOCK=inst/faucet/daq-faucet-$1/faucet_event.sock
 fi
 
 sudo FAUCET_EVENT_SOCK=$SOCK venv/bin/python daq/forchestrator.py
