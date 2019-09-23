@@ -15,7 +15,7 @@ firebase/public/firebase_config.js
 
 # Runtime or sub-module files
 inst/
-faucet/
+faucet
 mininet/
 local/
 firebase/.firebaserc
