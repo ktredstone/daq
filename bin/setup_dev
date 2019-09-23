@@ -9,8 +9,8 @@
 ROOT=$(dirname $0)/..
 cd $ROOT
 
-FAUCETR=${DAQ_FAUCET_REPO:-https://github.com/grafnu/faucet}
-FAUCETB=${DAQ_FAUCET_BRANCH:-gdump}
+FAUCETR=${DAQ_FAUCET_REPO}
+FAUCETB=${DAQ_FAUCET_BRANCH}
 FAUCETX=$(cat misc/FAUCET_VERSION)
 FAUCETV=${DAQ_FAUCET_VER:-$FAUCETX}
 MININET=https://github.com/mininet/mininet
@@ -46,8 +46,10 @@ if [ "$DAQ_BUILD" == "no" ]; then
     exit 0
 fi
 
+# Hacky workaround for https://travis-ci.community/t/sometimes-build-fails-when-apt-is-updating-postgresql-apt-repository/4872/17
+# Need to remove the || true at the end of the update line. Also in bin/setup_base.
 echo $AG update
-$AG update
+$AG update || true
 
 echo $AG install
 $AG install lsb-release
@@ -134,6 +136,8 @@ if [ -d faucet ]; then
     echo faucet already installed, faucet version $(cd faucet; git rev-list -n 1 HEAD)
 elif [ -z "$FAUCETV" ]; then
     echo No faucet version found, skipping.
+elif [ -z "$FAUCETR" ]; then
+    echo No faucet repo defined, skipping.
 else
     echo Cloning $FAUCETR...
     git clone $FAUCETR faucet
