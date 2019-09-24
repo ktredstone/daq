@@ -71,8 +71,7 @@ function test_stack {
     docker exec daq-faux-2 arp -d 192.168.0.3 &
     docker exec daq-faux-3 arp -d 192.168.0.2 &
     docker exec daq-faux-3 arp -d 192.168.0.3 &
-    sleep 2
-    echo Executing 2nd warm-up
+    sleep 1
     docker exec daq-faux-1 ping -c 3 192.168.0.2 &
     docker exec daq-faux-1 ping -c 3 192.168.0.3 &
     docker exec daq-faux-2 ping -c 3 192.168.0.1 &
