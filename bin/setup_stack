@@ -86,7 +86,6 @@ function add_oeth {
 echo Configuring mode $mode...
 
 docker kill daq-faucet-1 || true
-#docker kill daq-faucet-2 || true
 docker kill daq-faucet-corp || true
 
 add_br corp  0x111 6683
@@ -161,8 +160,6 @@ sleep 30
 
 echo daq-faucet-1
 head inst/faucet/daq-faucet-1/faucet.log
-#echo daq-faucet-2
-#head inst/faucet/daq-faucet-2/faucet.log
 echo
 
 echo Starting connection warm-up for 30s...
