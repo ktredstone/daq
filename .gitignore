@@ -3,6 +3,7 @@
 .build_hash
 .build_files
 .build_built
+.project
 
 firebase/public/firebase_config.js
 
@@ -14,7 +15,7 @@ firebase/public/firebase_config.js
 
 # Runtime or sub-module files
 inst/
-faucet/
+faucet
 mininet/
 local/
 firebase/.firebaserc
