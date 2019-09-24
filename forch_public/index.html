@@ -5,6 +5,17 @@
 </head>
 <body onload="initialize()">
   <h1>Faucet-Core Troubleshooting Data Viewer</h1>
+  <div id="switch_table">
+    <table>
+    </table>
+  </div>
   <div id="viewer_container">
   </div>
+  <template id="switch_row_template">
+    <tr>
+      <td>
+        <span>Hello ${switches[switch_name].id}</span>
+      </td>
+    </tr>
+  </template>
 </body>
