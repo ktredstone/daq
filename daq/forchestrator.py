@@ -54,7 +54,8 @@ class Forchestrator:
             (dpid, port, target_mac, src_ip) = self._faucet_events.as_port_learn(event)
             if dpid and port:
                 LOGGER.info('Port learn %s %s %s', dpid, port, target_mac)
-                self._faucet_states_collector.process_port_learn(dpid, port, target_mac, src_ip, timestamp)
+                self._faucet_states_collector.process_port_learn(
+                    dpid, port, target_mac, src_ip, timestamp)
 
             (dpid, restart_type) = self._faucet_events.as_config_change(event)
             if dpid is not None:
@@ -72,7 +73,7 @@ class Forchestrator:
 
     def get_switches(self, path, params):
         """Get the state of the switches"""
-        return self._faucet_states_collector.get_switches()
+        return self._faucet_states_collector.get_switches(params['switch_name'])
 
     def get_topology(self, path, params):
         """Get the network topology overview"""
