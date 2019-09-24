@@ -19,7 +19,7 @@ env:
   global:
     - DOCKER_STARTUP_TIMEOUT_MS=60000
     - DAQ_FAUCET_REPO=https://github.com/grafnu/faucet
-    - DAQ_FAUCET_VER=0bff72e5c80e21f4f50951d3d136ea4c6fa2881b
+    - DAQ_FAUCET_VER=24547dfdfbc85cb0347374aaccd187bbb80d560b
   matrix:
     #- DAQ_TEST=base
     #- DAQ_TEST=many
