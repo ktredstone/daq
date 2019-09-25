@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-echo Script name: "$0"
-
 if [ -z "$1" ];then 
     SOCK=inst/faucet_event.sock
 else
