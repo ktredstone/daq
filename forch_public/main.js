@@ -10,9 +10,10 @@ function load_viewer() {
   editor = new JSONEditor(container, options);
 }
 
-function data_update(category, json, func) {
-  console.log('Updating', category, 'with', json);
-  data[category] = json;
+function data_update(category, new_data, func) {
+  console.log('Updating', category, 'with', new_data);
+  console.log(JSON.stringify(new_data, null, 2));
+  data[category] = new_data;
   editor.set(data);
   func && func();
 }
@@ -53,7 +54,6 @@ function render_t1_switches(switch_left, switch_right) {
   const temp = document.getElementById('switch_dist_row_template');
   const table_row_html = temp.innerHTML;
   const table_row = eval('`' + table_row_html + '`');
-  console.log('table_row', table_row)
   const tbody_holder = document.createElement('tbody');
   tbody_holder.innerHTML = table_row;
   const table_element = document.querySelector('#switch_table tbody');
@@ -65,7 +65,6 @@ function render_t2_switch(switch_name) {
   const temp = document.getElementById('switch_access_row_template');
   const table_row_html = temp.innerHTML;
   const table_row = eval('`' + table_row_html + '`');
-  console.log('table_row', table_row)
   const tbody_holder = document.createElement('tbody');
   tbody_holder.innerHTML = table_row;
   const table_element = document.querySelector('#switch_table tbody');
@@ -82,6 +81,9 @@ function populate_table() {
   }
   
   console.log('switch_names', switch_names)
+  for (const switch_name of switch_names) {
+    fetch_data(`switch_${switch_name}`, `switch?switch_name=${switch_name}`);
+  }
 
   t1_switches = find_t1_switches(switch_names);
   console.log('t1_switches', t1_switches);
