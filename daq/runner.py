@@ -143,9 +143,9 @@ class DAQRunner:
             (dpid, port, target_mac) = self.faucet_events.as_port_learn(event)
             if dpid and port:
                 self._handle_port_learn(dpid, port, target_mac)
-            (dpid, restart_type) = self.faucet_events.as_config_change(event)
+            (dpid, restart_type, dp_name) = self.faucet_events.as_config_change(event)
             if dpid is not None:
-                LOGGER.debug('dp_id %d restart %s', dpid, restart_type)
+                LOGGER.debug('dp_id %d %s restart %s', dpid, dp_name, restart_type)
 
     def _handle_port_state(self, dpid, port, active):
         if self.network.is_system_port(dpid, port):

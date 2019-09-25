@@ -22,7 +22,7 @@ class Forchestrator:
         self._config = config
         self._faucet_events = None
         self._server = None
-        self._faucet_states_collector = FaucetStatesCollector()
+        self._collector = FaucetStatesCollector()
 
     def initialize(self):
         """Initialize forchestrator instance"""
@@ -42,28 +42,27 @@ class Forchestrator:
             if not event:
                 return True
 
-            LOGGER.debug('Faucet event %s', event)
             timestamp = event.get("timestamp", time.time())
 
             (dpid, port, active) = self._faucet_events.as_port_state(event)
             if dpid and port:
                 LOGGER.info('Port state %s %s %s', dpid, port, active)
-                self._faucet_states_collector.process_port_state(timestamp, dpid, port, active)
+                self._collector.process_port_state(timestamp, dpid, port, active)
 
             (dpid, port, target_mac) = self._faucet_events.as_port_learn(event)
             if dpid and port:
                 LOGGER.info('Port learn %s %s %s', dpid, port, target_mac)
-                self._faucet_states_collector.process_port_learn(timestamp, dpid, port, target_mac)
+                self._collector.process_port_learn(timestamp, dpid, port, target_mac)
 
-            (dpid, restart_type) = self._faucet_events.as_config_change(event)
+            (dpid, restart_type, dp_name) = self._faucet_events.as_config_change(event)
             if dpid is not None:
-                LOGGER.info('DP restart %d %s', dpid, restart_type)
-                self._faucet_states_collector.process_config_change(timestamp, dpid, restart_type)
+                LOGGER.info('DP restart %d %s %s', dpid, restart_type, dp_name)
+                self._collector.process_config_change(timestamp, dpid, restart_type, dp_name)
 
             (stack_root, graph) = self._faucet_events.as_stack_topo_change(event)
             if stack_root is not None:
                 LOGGER.info('stack topology change root:%s graph:%s', stack_root, graph)
-                self._faucet_states_collector\
+                self._collector\
                         .process_stack_topo_change(timestamp, stack_root, graph)
 
 
@@ -78,11 +77,11 @@ class Forchestrator:
 
     def get_switches(self, path, params):
         """Get the state of the switches"""
-        return self._faucet_states_collector.get_switches()
+        return self._collector.get_switches()
 
     def get_topology(self, path, params):
         """Get the network topology overview"""
-        return self._faucet_states_collector.get_topology()
+        return self._collector.get_topology()
 
 
 if __name__ == '__main__':

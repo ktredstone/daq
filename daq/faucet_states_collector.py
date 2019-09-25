@@ -7,7 +7,7 @@ def save_states(func):
     """Decorator to dump the current states after the states map is modified"""
     def wrapped(self, *args, **kwargs):
         res = func(self, *args, **kwargs)
-        print(self.system_states)
+        #print(self.system_states)
         return res
 
     return wrapped
@@ -89,10 +89,9 @@ class FaucetStatesCollector:
             topo_change_obj.setdefault(FaucetStatesCollector.TOPOLOGY_CHANGE_COUNT, 0) + 1
 
     @save_states
-    def process_config_change(self, timestamp, dpid, restart_type):
+    def process_config_change(self, timestamp, dpid, restart_type, dp_name):
         """process config change event"""
-        config_change_table = self.switch_states\
-            .setdefault(dpid, {})
+        config_change_table = self.switch_states.setdefault(dp_name, {})
 
         config_change_table[FaucetStatesCollector.MAP_ENTRY_LAST_RESTART_TYPE] = restart_type
         config_change_table[FaucetStatesCollector.MAP_ENTRY_LAST_RESTART_TS] = \

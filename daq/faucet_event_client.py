@@ -161,8 +161,9 @@ class FaucetEventClient():
     def as_config_change(self, event):
         """Convert the event to dp change info, if applicable"""
         if not event or 'CONFIG_CHANGE' not in event:
-            return (None, None)
-        return (event['dp_id'], event['CONFIG_CHANGE'].get('restart_type'))
+            return (None, None, None)
+        restart_type = event['CONFIG_CHANGE'].get('restart_type')
+        return (event['dp_id'], restart_type, event['dp_name'])
 
     def as_ports_status(self, event):
         """Convert the event to port status info, if applicable"""
