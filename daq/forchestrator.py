@@ -61,7 +61,7 @@ class Forchestrator:
 
             (stack_root, graph) = self._faucet_events.as_stack_topo_change(event)
             if stack_root is not None:
-                LOGGER.info('stack topology change root:%s graph:%s', stack_root, graph)
+                LOGGER.info('stack topology change root:%s', stack_root)
                 self._collector\
                         .process_stack_topo_change(timestamp, stack_root, graph)
 
