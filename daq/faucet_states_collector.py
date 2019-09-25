@@ -168,4 +168,3 @@ class FaucetStatesCollector:
         topo_change_obj[FaucetStatesCollector.TOPOLOGY_GRAPH] = graph
         topo_change_obj[FaucetStatesCollector.TOPOLOGY_CHANGE_COUNT] =\
             topo_change_obj.setdefault(FaucetStatesCollector.TOPOLOGY_CHANGE_COUNT, 0) + 1
-
