@@ -113,7 +113,7 @@ class FaucetStatesCollector:
                 FaucetStatesCollector.MAP_ENTRY_PORT_STATE_CHANGED_COUNT, 0) + 1
 
     @dump_states
-    # pylint: disable=too-many-argument
+    # pylint: disable=too-many-arguments
     def process_port_learn(self, dpid, port, mac, src_ip, timestamp):
         """process port learn event"""
         # update global mac table
