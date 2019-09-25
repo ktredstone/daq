@@ -1,6 +1,5 @@
 """Orchestrator component for controlling a Faucet SDN"""
 
-import json
 import logging
 import sys
 import time
@@ -64,7 +63,8 @@ class Forchestrator:
             (stack_root, graph) = self._faucet_events.as_stack_topo_change(event)
             if stack_root is not None:
                 LOGGER.info('stack topology change root:%s graph:%s', stack_root, graph)
-                self._faucet_states_collector.process_stack_topo_change(timestamp, stack_root, graph)
+                self._faucet_states_collector\
+                        .process_stack_topo_change(timestamp, stack_root, graph)
 
 
         return False
