@@ -55,11 +55,8 @@ class FaucetStatesCollector:
 
     def get_switches(self):
         switch_data = {}
-        print('get_switches')
         for switch_name in self.switch_states:
-            print('collecting', switch_name)
             switch_data[switch_name] = self.get_switch(switch_name)
-        print(switch_data)
         return switch_data
 
     def get_switch(self, switch_name):

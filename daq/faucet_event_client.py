@@ -79,11 +79,11 @@ class FaucetEventClient():
                 return event
             return None
 
-        (dpid, status) = self.as_ports_status(event)
+        (dpid, status, name) = self.as_ports_status(event)
         if dpid:
             for port in status:
                 # Prepend events so they functionally replace the current one in the queue.
-                self._prepend_event(self._make_port_state(dpid, port, status[port]))
+                self._prepend_event(self._make_port_state(dpid, port, status[port], name))
             return None
         return event
 
@@ -169,8 +169,8 @@ class FaucetEventClient():
     def as_ports_status(self, event):
         """Convert the event to port status info, if applicable"""
         if not event or 'PORTS_STATUS' not in event:
-            return (None, None)
-        return (event['dp_id'], event['PORTS_STATUS'])
+            return (None, None, None)
+        return (event['dp_id'], event['PORTS_STATUS'], event['dp_name'])
 
     def as_port_state(self, event):
         """Convert event to a port state info, if applicable"""
