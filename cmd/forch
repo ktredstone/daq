@@ -2,4 +2,5 @@
 
 SOCK=inst/faucet_event.sock
 
+echo Using event socket $SOCK
 sudo FAUCET_EVENT_SOCK=$SOCK venv/bin/python daq/forchestrator.py
