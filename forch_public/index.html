@@ -8,15 +8,20 @@
   <h2>Network Table Overview</h2>
   <div id="switch_table">
     <table>
+      <tbody>
+      </tbody>
     </table>
   </div>
   <h2>Raw API Data</h2>
   <div id="viewer_container">
   </div>
-  <template id="switch_row_template">
+  <template id="switch_dist_row_template">
     <tr>
       <td>
-        <span>Hello ${data.switches[switch_name].dp_id}</span>
+        <span>${data.switches[switch_left].last_restart_timestamp}</span>
+      </td>
+      <td>
+        <span>${data.switches[switch_right].last_restart_timestamp}</span>
       </td>
     </tr>
   </template>
