@@ -53,18 +53,27 @@ class FaucetStatesCollector:
         """get the topology state"""
         return self.topo_state
 
-    def get_switches(self, switch_name):
+    def get_switches(self):
+        switch_data = {}
+        print('get_switches')
+        for switch_name in self.switch_states:
+            print('collecting', switch_name)
+            switch_data[switch_name] = self.get_switch(switch_name)
+        print(switch_data)
+        return switch_data
+
+    def get_switch(self, switch_name):
         """get switches state"""
         switch_map = {}
 
         # filling switch attributes
         attributes_map = switch_map.setdefault("attributes", {})
-        attributes_map["name"] = ""
-        attributes_map["dp_id"] = switch_name
+        attributes_map["name"] = switch_name
+        attributes_map["dp_id"] = -1
         attributes_map["description"] = ""
 
         # filling switch dynamics
-        switch_states = self.switch_states.get(int(switch_name), {})
+        switch_states = self.switch_states.get(str(switch_name), {})
         switch_map["config_change_count"] = \
             switch_states.get(FaucetStatesCollector.MAP_ENTRY_CONFIG_CHANGE_COUNT, "")
         switch_map["last_restart_type"] = \
@@ -112,10 +121,10 @@ class FaucetStatesCollector:
         return switch_map
 
     @dump_states
-    def process_port_state(self, timestamp, dpid, port, status):
+    def process_port_state(self, timestamp, name, port, status):
         """process port state event"""
         port_table = self.switch_states\
-            .setdefault(dpid, {})\
+            .setdefault(name, {})\
             .setdefault(FaucetStatesCollector.MAP_ENTRY_PORTS, {})\
             .setdefault(port, {})
 
@@ -129,7 +138,7 @@ class FaucetStatesCollector:
 
     @dump_states
     # pylint: disable=too-many-arguments
-    def process_port_learn(self, timestamp, dpid, port, mac, src_ip):
+    def process_port_learn(self, timestamp, name, port, mac, src_ip):
         """process port learn event"""
         # update global mac table
         global_mac_table = self.system_states\
@@ -143,12 +152,12 @@ class FaucetStatesCollector:
 
         # update per switch mac table
         self.switch_states\
-            .setdefault(dpid, {})\
+            .setdefault(name, {})\
             .setdefault(FaucetStatesCollector.MAP_ENTRY_LEARNED_MACS, set())\
             .add(mac)
 
     @dump_states
-    def process_config_change(self, timestamp, dpid, restart_type, dp_name):
+    def process_config_change(self, timestamp, dp_name, restart_type, dp_id):
         """process config change event"""
         config_change_table = self.switch_states.setdefault(dp_name, {})
 
