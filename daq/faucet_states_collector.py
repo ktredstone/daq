@@ -1,5 +1,6 @@
 """Processing faucet events"""
 from datetime import datetime
+import json
 
 
 def save_states(func):
@@ -25,17 +26,30 @@ class FaucetStatesCollector:
     MAP_ENTRY_CONFIG_CHANGE_COUNT = "change_count"
     MAP_ENTRY_LAST_RESTART_TYPE = "last_restart"
     MAP_ENTRY_LAST_RESTART_TS = "last_restart_timestamp"
+    TOPOLOGY_ENTRY = "topology"
+    TOPOLOGY_ROOT = "stack_root"
+    TOPOLOGY_GRAPH = "graph_obj"
+    TOPOLOGY_CHANGE_COUNT = "change_count"
 
     def __init__(self):
-        self.system_states = {FaucetStatesCollector.MAP_ENTRY_SWITCH: {}}
+        self.system_states = {FaucetStatesCollector.MAP_ENTRY_SWITCH: {}, FaucetStatesCollector.TOPOLOGY_ENTRY: {}}
         self.switch_states = self.system_states[FaucetStatesCollector.MAP_ENTRY_SWITCH]
+        self.topo_state = self.system_states[FaucetStatesCollector.TOPOLOGY_ENTRY]
 
     def get_switches(self):
+        """get switches state"""
+        return self.switch_states
+
+    def get_system(self):
         """get the system states"""
         return self.system_states
 
+    def get_topology(self):
+        """get the topology state"""
+        return self.topo_state
+
     @save_states
-    def process_port_state(self, dpid, port, status, timestamp):
+    def process_port_state(self, timestamp, dpid, port, status):
         """process port state event"""
         port_table = self.switch_states\
             .setdefault(dpid, {})\
@@ -51,7 +65,7 @@ class FaucetStatesCollector:
                 FaucetStatesCollector.MAP_ENTRY_PORT_STATE_CHANGED_COUNT, 0) + 1
 
     @save_states
-    def process_port_learn(self, dpid, port, mac, timestamp):
+    def process_port_learn(self, timestamp, dpid, port, mac):
         """process port learn event"""
         mac_table = self.switch_states\
             .setdefault(dpid, {})\
@@ -64,7 +78,17 @@ class FaucetStatesCollector:
             datetime.fromtimestamp(timestamp).isoformat()
 
     @save_states
-    def process_config_change(self, dpid, restart_type, timestamp):
+    def process_stack_topo_change(self, timestamp, stack_root, graph):
+        """Process stack topology change event"""
+        topo_change_obj = self.topo_state
+
+        topo_change_obj[FaucetStatesCollector.TOPOLOGY_ROOT] = stack_root
+        topo_change_obj[FaucetStatesCollector.TOPOLOGY_GRAPH] = graph
+        topo_change_obj[FaucetStatesCollector.TOPOLOGY_CHANGE_COUNT] =\
+            topo_change_obj.setdefault(FaucetStatesCollector.TOPOLOGY_CHANGE_COUNT, 0) + 1
+
+    @save_states
+    def process_config_change(self, timestamp, dpid, restart_type):
         """process config change event"""
         config_change_table = self.switch_states\
             .setdefault(dpid, {})
