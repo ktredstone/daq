@@ -51,10 +51,6 @@ function test_pair {
 }
 
 function test_stack {
-    mode=$1
-    echo Testing stack mode $mode | tee -a $TEST_RESULTS
-    bin/setup_stack local $mode || exit 1
-
     echo Capturing pcaps for $cap_length seconds...
     timeout $cap_length tcpdump -Q out -eni t1sw1-eth28 -w $t1sw1p28_pcap &
     timeout $cap_length tcpdump -Q out -eni t1sw2-eth28 -w $t1sw2p28_pcap &
@@ -95,7 +91,7 @@ function test_stack {
     bcount47=$(tcpdump -en -r $t2sw1p47_pcap | wc -l) 2>/dev/null
     bcount48=$(tcpdump -en -r $t2sw1p48_pcap | wc -l) 2>/dev/null
     bcount_total=$((bcount47 + bcount48))
-    echo pcap $mode count is $bcount47 $bcount48 $bcount_total
+    echo pcap count is $bcount47 $bcount48 $bcount_total
     echo pcap sane $((bcount_total > 100)) $((bcount_total < 220)) | tee -a $TEST_RESULTS
     echo pcap t2sw1p47
     tcpdump -en -c 20 -r $t2sw1p47_pcap
@@ -103,22 +99,21 @@ function test_stack {
     tcpdump -en -c 20 -r $t2sw1p48_pcap
     echo pcap end
 
-
     bcount1e=$(tcpdump -en -r $t1sw1p28_pcap ether broadcast| wc -l) 2>/dev/null
     bcount2e=$(tcpdump -en -r $t1sw2p28_pcap ether broadcast| wc -l) 2>/dev/null
     bcount1h=$(tcpdump -en -r $t2sw1p1_pcap ether broadcast | wc -l) 2>/dev/null
     bcount2h=$(tcpdump -en -r $t2sw2p1_pcap ether broadcast | wc -l) 2>/dev/null
-    echo pcap bcast $bcount1e $bcount2e $bcount1h $bcount2h
+    echo pcap bcast $bcount1e $bcount2e $bcount1h $bcount2h | tee -a $TEST_RESULTS
     
     telnet47=$(tcpdump -en -r $t2sw1p47_pcap vlan and port 23 | wc -l) 2>/dev/null
     https47=$(tcpdump -en -r $t2sw1p47_pcap vlan and port 443 | wc -l) 2>/dev/null
     telnet48=$(tcpdump -en -r $t2sw1p48_pcap vlan and port 23 | wc -l) 2>/dev/null
     https48=$(tcpdump -en -r $t2sw1p48_pcap vlan and port 443 | wc -l) 2>/dev/null
-    echo $mode telnet $((telnet47 + telnet48)) https $((https47 + https48)) | tee -a $TEST_RESULTS
+    echo telnet $((telnet47 + telnet48)) https $((https47 + https48)) | tee -a $TEST_RESULTS
 
     cat $nodes_dir/* | tee -a $TEST_RESULTS
 
-    echo Done with stack test $mode. | tee -a $TEST_RESULTS
+    echo Done with stack test. | tee -a $TEST_RESULTS
 }
 
 function test_dot1x {
@@ -136,7 +131,14 @@ function test_dot1x {
 
 echo Stacking Tests >> $TEST_RESULTS
 bin/net_clean
-test_stack bond
+bin/setup_stack local || exit 1
+test_stack
+ip link set t1sw1-eth9 down
+test_stack
+ip link set t1sw1-eth10 down
+test_stack
+ip link set t1sw1-eth12 down
+test_stack
 
 echo Dot1x setup >> $TEST_RESULTS
 #bin/net_clean
