@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 source testing/test_preamble.sh
 
@@ -53,31 +53,26 @@ function test_pair {
 function test_stack {
     mode=$1
     echo Testing stack mode $mode | tee -a $TEST_RESULTS
-    bin/setup_stack $mode || exit 1
+    bin/setup_stack local $mode || exit 1
 
     echo Capturing pcaps for $cap_length seconds...
-    timeout $cap_length tcpdump -eni t1sw1-eth28 -w $t1sw1p28_pcap &
-    timeout $cap_length tcpdump -eni t1sw2-eth28 -w $t1sw2p28_pcap &
-    timeout $cap_length tcpdump -eni faux-1 -w $t2sw1p1_pcap &
+    timeout $cap_length tcpdump -Q out -eni t1sw1-eth28 -w $t1sw1p28_pcap &
+    timeout $cap_length tcpdump -Q out -eni t1sw2-eth28 -w $t1sw2p28_pcap &
+    timeout $cap_length tcpdump -Q out -eni faux-1 -w $t2sw1p1_pcap &
     timeout $cap_length tcpdump -eni t2sw1-eth47 -w $t2sw1p47_pcap &
     timeout $cap_length tcpdump -eni t2sw1-eth48 -w $t2sw1p48_pcap &
-    timeout $cap_length tcpdump -eni faux-2 -w $t2sw2p1_pcap &
+    timeout $cap_length tcpdump -Q out -eni faux-2 -w $t2sw2p1_pcap &
     sleep 5
 
-    echo Cleaning ARP
-    docker exec daq-faux-1 arp -d 192.168.0.2 &
-    docker exec daq-faux-1 arp -d 192.168.0.3 &
-    docker exec daq-faux-2 arp -d 192.168.0.1 &
-    docker exec daq-faux-2 arp -d 192.168.0.3 &
-    docker exec daq-faux-3 arp -d 192.168.0.2 &
-    docker exec daq-faux-3 arp -d 192.168.0.3 &
-    sleep 1
-    docker exec daq-faux-1 ping -c 3 192.168.0.2 &
-    docker exec daq-faux-1 ping -c 3 192.168.0.3 &
-    docker exec daq-faux-2 ping -c 3 192.168.0.1 &
-    docker exec daq-faux-2 ping -c 3 192.168.0.3 &
-    docker exec daq-faux-3 ping -c 3 192.168.0.1 &
-    docker exec daq-faux-3 ping -c 3 192.168.0.2 &
+    echo Simple tests...
+    docker exec daq-faux-1 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
+    docker exec daq-faux-1 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
+    sleep 3
+    docker exec daq-faux-2 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
+    docker exec daq-faux-2 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
+    sleep 3
+    docker exec daq-faux-3 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
+    docker exec daq-faux-3 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
     sleep 3
 
     test_pair 1 2
@@ -108,6 +103,13 @@ function test_stack {
     tcpdump -en -c 20 -r $t2sw1p48_pcap
     echo pcap end
 
+
+    bcount1e=$(tcpdump -en -r $t1sw1p28_pcap ether broadcast| wc -l) 2>/dev/null
+    bcount2e=$(tcpdump -en -r $t1sw2p28_pcap ether broadcast| wc -l) 2>/dev/null
+    bcount1h=$(tcpdump -en -r $t2sw1p1_pcap ether broadcast | wc -l) 2>/dev/null
+    bcount2h=$(tcpdump -en -r $t2sw2p1_pcap ether broadcast | wc -l) 2>/dev/null
+    echo bcap $bcount1e $bcount2e $bcount1h $bcount2h
+    
     telnet47=$(tcpdump -en -r $t2sw1p47_pcap vlan and port 23 | wc -l) 2>/dev/null
     https47=$(tcpdump -en -r $t2sw1p47_pcap vlan and port 443 | wc -l) 2>/dev/null
     telnet48=$(tcpdump -en -r $t2sw1p48_pcap vlan and port 23 | wc -l) 2>/dev/null
