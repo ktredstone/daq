@@ -52,7 +52,7 @@ function test_pair {
 
 function test_stack {
     echo Waiting for network stability...
-    sleep 30
+    sleep 15
 
     echo Capturing pcaps for $cap_length seconds...
     timeout $cap_length tcpdump -Q out -eni t1sw1-eth28 -w $t1sw1p28_pcap &
@@ -66,13 +66,11 @@ function test_stack {
     echo Simple tests...
     docker exec daq-faux-1 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
     docker exec daq-faux-1 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
-    sleep 3
     docker exec daq-faux-2 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
     docker exec daq-faux-2 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
-    sleep 3
     docker exec daq-faux-3 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
     docker exec daq-faux-3 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
-    sleep 3
+    sleep 10
 
     test_pair 1 2
     test_pair 1 3
@@ -138,6 +136,9 @@ bin/setup_stack local || exit 1
 test_stack
 ip link set t1sw1-eth9 down
 test_stack
+
+exit
+
 ip link set t1sw1-eth10 down
 test_stack
 ip link set t1sw1-eth12 down
