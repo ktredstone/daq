@@ -21,7 +21,7 @@ nodes_dir=$out_dir/nodes
 mkdir -p $out_dir $nodes_dir
 
 ping_count=10
-cap_length=$((ping_count + 20))
+cap_length=$((ping_count + 60))
 
 echo Generator tests | tee -a $TEST_RESULTS
 rm -rf out/topology
@@ -66,8 +66,10 @@ function test_stack {
     echo Simple tests...
     docker exec daq-faux-1 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
     docker exec daq-faux-1 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
+    sleep 10
     docker exec daq-faux-2 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
     docker exec daq-faux-2 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
+    sleep 10
     docker exec daq-faux-3 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
     docker exec daq-faux-3 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
     sleep 10
