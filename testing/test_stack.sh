@@ -51,6 +51,9 @@ function test_pair {
 }
 
 function test_stack {
+    echo Waiting for network stability...
+    sleep 30
+
     echo Capturing pcaps for $cap_length seconds...
     timeout $cap_length tcpdump -Q out -eni t1sw1-eth28 -w $t1sw1p28_pcap &
     timeout $cap_length tcpdump -Q out -eni t1sw2-eth28 -w $t1sw2p28_pcap &
