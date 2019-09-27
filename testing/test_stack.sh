@@ -135,13 +135,10 @@ function test_dot1x {
 echo Stacking Tests >> $TEST_RESULTS
 bin/net_clean
 bin/setup_stack local || exit 1
-#test_stack
+test_stack
 ip link set t1sw1-eth9 down
 test_stack
-
-exit
-
-ip link set t1sw1-eth10 down
+ip link set t1sw2-eth10 down
 test_stack
 ip link set t1sw1-eth12 down
 test_stack
