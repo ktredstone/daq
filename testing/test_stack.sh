@@ -21,7 +21,7 @@ nodes_dir=$out_dir/nodes
 mkdir -p $out_dir $nodes_dir
 
 ping_count=10
-cap_length=$((ping_count + 60))
+cap_length=$((ping_count + 20))
 
 echo Generator tests | tee -a $TEST_RESULTS
 rm -rf out/topology
@@ -51,6 +51,9 @@ function test_pair {
 }
 
 function test_stack {
+    echo Restarting faucet to force cold start...
+    docker restart daq-faucet-1
+
     echo Waiting for network stability...
     sleep 15
 
@@ -64,15 +67,12 @@ function test_stack {
     sleep 5
 
     echo Simple tests...
-    docker exec daq-faux-1 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
-    docker exec daq-faux-1 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
-    sleep 10
-    docker exec daq-faux-2 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
-    docker exec daq-faux-2 sh -c "arp -d 192.168.0.3; ping -c 3 192.168.0.3 &"
-    sleep 10
-    docker exec daq-faux-3 sh -c "arp -d 192.168.0.1; ping -c 3 192.168.0.1 &"
-    docker exec daq-faux-3 sh -c "arp -d 192.168.0.2; ping -c 3 192.168.0.2 &"
-    sleep 10
+    docker exec daq-faux-1 sh -c "arp -d 192.168.0.2; ping -c 1 192.168.0.2"
+    docker exec daq-faux-1 sh -c "arp -d 192.168.0.3; ping -c 1 192.168.0.3"
+    docker exec daq-faux-2 sh -c "arp -d 192.168.0.1; ping -c 1 192.168.0.1"
+    docker exec daq-faux-2 sh -c "arp -d 192.168.0.3; ping -c 1 192.168.0.3"
+    docker exec daq-faux-3 sh -c "arp -d 192.168.0.1; ping -c 1 192.168.0.1"
+    docker exec daq-faux-3 sh -c "arp -d 192.168.0.2; ping -c 1 192.168.0.2"
 
     test_pair 1 2
     test_pair 1 3
@@ -135,7 +135,7 @@ function test_dot1x {
 echo Stacking Tests >> $TEST_RESULTS
 bin/net_clean
 bin/setup_stack local || exit 1
-test_stack
+#test_stack
 ip link set t1sw1-eth9 down
 test_stack
 

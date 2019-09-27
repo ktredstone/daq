@@ -156,16 +156,16 @@ for index in 1; do
 done
 
 echo Letting system settle...
-sleep 30
+sleep 10
 
 echo daq-faucet-1
 head inst/faucet/daq-faucet-1/faucet.log
 echo
 
-echo Starting connection warm-up for 30s...
-docker exec daq-faux-1 ping -q -c 30 192.168.0.2 &
-docker exec daq-faux-2 ping -q -c 30 192.168.0.3 &
-docker exec daq-faux-3 ping -q -c 30 192.168.0.1 &
+echo Starting connection warm-up for 10s...
+docker exec daq-faux-1 ping -q -c 10 192.168.0.2 &
+docker exec daq-faux-2 ping -q -c 10 192.168.0.3 &
+docker exec daq-faux-3 ping -q -c 10 192.168.0.1 &
 
 echo Waiting for warm-ups to complete...
 wait
