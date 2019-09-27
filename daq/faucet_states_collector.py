@@ -93,26 +93,20 @@ class FaucetStatesCollector:
 
             # port dynamics
             port_map["status_up"] = port_states.get(MAP_ENTRY_PORT_STATUS_UP, "")
-            port_map["port_type"] = ""
-            port_map["status_timestamp"] = \
-                port_states.get(MAP_ENTRY_PORT_STATUS_TS, "")
-            port_map["status_count"] = \
-                port_states.get(MAP_ENTRY_PORT_STATUS_COUNT, "")
-            port_map["packet_count"] = ""
+            port_map["port_type"] = None
+            port_map["status_timestamp"] = port_states.get(MAP_ENTRY_PORT_STATUS_TS, "")
+            port_map["status_count"] = port_states.get(MAP_ENTRY_PORT_STATUS_COUNT, "")
+            port_map["packet_count"] = None
 
         # filling learned macs
         switch_learned_mac_map = switch_map.setdefault("learned_macs", {})
-        system_learned_mac_states = \
-            self.system_states.get(MAP_ENTRY_LEARNED_MACS, {})
+        system_learned_mac_states = self.system_states.get(MAP_ENTRY_LEARNED_MACS, {})
         for mac in switch_states.get(MAP_ENTRY_LEARNED_MACS, set()):
             mac_map = switch_learned_mac_map.setdefault(mac, {})
             mac_states = system_learned_mac_states.get(mac, {})
-            mac_map["port"] =\
-                mac_states.get(MAP_ENTRY_MAC_LEARNING_PORT, "")
-            mac_map["timestamp"] = \
-                mac_states.get(MAP_ENTRY_MAC_LEARNING_TS, "")
-            mac_map["ip_address"] = \
-                mac_states.get(MAP_ENTRY_MAC_LEARNING_IP, "")
+            mac_map["port"] = mac_states.get(MAP_ENTRY_MAC_LEARNING_PORT, "")
+            mac_map["timestamp"] = mac_states.get(MAP_ENTRY_MAC_LEARNING_TS, "")
+            mac_map["ip_address"] = mac_states.get(MAP_ENTRY_MAC_LEARNING_IP, "")
 
         return switch_map
 
@@ -125,12 +119,9 @@ class FaucetStatesCollector:
             .setdefault(port, {})
 
         port_table[MAP_ENTRY_PORT_STATUS_UP] = status
-        port_table[MAP_ENTRY_PORT_STATUS_TS] = \
-            datetime.fromtimestamp(timestamp).isoformat()
+        port_table[MAP_ENTRY_PORT_STATUS_TS] = datetime.fromtimestamp(timestamp).isoformat()
 
-        port_table[MAP_ENTRY_PORT_STATUS_COUNT] = \
-            port_table.setdefault(
-                MAP_ENTRY_PORT_STATUS_COUNT, 0) + 1
+        port_table[MAP_ENTRY_PORT_STATUS_COUNT] = port_table.setdefault(MAP_ENTRY_PORT_STATUS_COUNT, 0) + 1
 
     @dump_states
     # pylint: disable=too-many-arguments
@@ -143,8 +134,7 @@ class FaucetStatesCollector:
 
         global_mac_table[MAP_ENTRY_MAC_LEARNING_IP] = src_ip
         global_mac_table[MAP_ENTRY_MAC_LEARNING_PORT] = port
-        global_mac_table[MAP_ENTRY_MAC_LEARNING_TS] = \
-            datetime.fromtimestamp(timestamp).isoformat()
+        global_mac_table[MAP_ENTRY_MAC_LEARNING_TS] = datetime.fromtimestamp(timestamp).isoformat()
 
         # update per switch mac table
         self.switch_states\
@@ -163,11 +153,8 @@ class FaucetStatesCollector:
         config_change_table = self.switch_states.setdefault(dp_name, {})
 
         config_change_table[MAP_ENTRY_CONFIG_CHANGE_TYPE] = restart_type
-        config_change_table[MAP_ENTRY_CONFIG_CHANGE_TS] = \
-            datetime.fromtimestamp(timestamp).isoformat()
-        config_change_table[MAP_ENTRY_CONFIG_CHANGE_COUNT] = \
-            config_change_table.setdefault(
-                MAP_ENTRY_CONFIG_CHANGE_COUNT, 0) + 1
+        config_change_table[MAP_ENTRY_CONFIG_CHANGE_TS] = datetime.fromtimestamp(timestamp).isoformat()
+        config_change_table[MAP_ENTRY_CONFIG_CHANGE_COUNT] = config_change_table.setdefault(MAP_ENTRY_CONFIG_CHANGE_COUNT, 0) + 1
 
     @dump_states
     def process_stack_topo_change(self, timestamp, stack_root, graph):
