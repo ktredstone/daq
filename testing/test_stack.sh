@@ -51,13 +51,15 @@ function test_pair {
 }
 
 function test_stack {
+    echo Starting stack test... | tee -a $TEST_RESULTS
+
     echo Restarting faucet to force cold start...
     docker restart daq-faucet-1
 
     ip link  | fgrep t1sw | fgrep M-DOWN | sed -e 's/>.*//' | tee -a $TEST_RESULTS
 
     echo Waiting for network stability...
-    sleep 10
+    sleep 15
 
     echo Capturing pcaps for $cap_length seconds...
     timeout $cap_length tcpdump -Q out -eni t1sw1-eth28 -w $t1sw1p28_pcap &
