@@ -1,8 +1,8 @@
 """Processing faucet events"""
 
 import json
+
 from datetime import datetime
-import json
 
 
 def dump_states(func):

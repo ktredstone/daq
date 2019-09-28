@@ -4,7 +4,7 @@ source testing/test_preamble.sh
 
 # Runs lint checks and some similar things
 echo Lint checks | tee -a $TEST_RESULTS
-#cmd/inbuild skip
+cmd/inbuild skip
 echo cmd/inbuild exit code $? | tee -a $TEST_RESULTS
 
 out_dir=out/daq-test_stack
@@ -54,8 +54,10 @@ function test_stack {
     echo Restarting faucet to force cold start...
     docker restart daq-faucet-1
 
+    ip link  | fgrep t1sw | fgrep M-DOWN | sed -e 's/>.*//' | tee -a $TEST_RESULTS
+
     echo Waiting for network stability...
-    sleep 15
+    sleep 10
 
     echo Capturing pcaps for $cap_length seconds...
     timeout $cap_length tcpdump -Q out -eni t1sw1-eth28 -w $t1sw1p28_pcap &
@@ -142,8 +144,12 @@ ip link set t1sw2-eth10 down
 test_stack
 ip link set t1sw1-eth12 down
 test_stack
+ip link set t1sw1-eth10 down
+ip link set t1sw2-eth10 up
+ip link set t1sw1-eth12 up
+test_stack
 
-echo Dot1x setup >> $TEST_RESULTS
+#echo Dot1x setup >> $TEST_RESULTS
 #bin/net_clean
 #test_dot1x
 
