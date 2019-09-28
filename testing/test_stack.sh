@@ -50,6 +50,11 @@ function test_pair {
     docker exec $host $cmd | fgrep time= | fgrep -v DUP | wc -l >> $out_file 2>/dev/null &
 }
 
+# Compare two numbers and output { -1, 0, 1 }
+function comp {
+    echo $((($1 - $2 > 0) - ($1 - $2 < 0)))
+}
+
 function test_stack {
     echo Starting stack test... | tee -a $TEST_RESULTS
 
@@ -110,7 +115,8 @@ function test_stack {
     bcount2e=$(tcpdump -en -r $t1sw2p28_pcap ether broadcast| wc -l) 2>/dev/null
     bcount1h=$(tcpdump -en -r $t2sw1p1_pcap ether broadcast | wc -l) 2>/dev/null
     bcount2h=$(tcpdump -en -r $t2sw2p1_pcap ether broadcast | wc -l) 2>/dev/null
-    echo pcap bcast $bcount1e $bcount2e $bcount1h $bcount2h | tee -a $TEST_RESULTS
+    echo pcap bcast $(comp $bcount1e 4) $(comp $bcount2e 0) \
+         $(comp $bcount1h 4) $(comp $bcount2h 4) | tee -a $TEST_RESULTS
     
     telnet47=$(tcpdump -en -r $t2sw1p47_pcap vlan and port 23 | wc -l) 2>/dev/null
     https47=$(tcpdump -en -r $t2sw1p47_pcap vlan and port 443 | wc -l) 2>/dev/null

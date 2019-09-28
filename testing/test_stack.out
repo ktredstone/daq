@@ -7,7 +7,7 @@ Starting stack test...
 (UNKNOWN) [192.168.0.2] 23 (?) : Connection timed out
 (UNKNOWN) [192.168.0.2] 443 (?) : Connection refused
 pcap sane 1 1
-pcap bcast 4 0 4 4
+pcap bcast 0 0 0 0
 telnet 0 https 2
 daq-faux-1: ping -c 10 192.168.0.2 10
 daq-faux-1: ping -c 10 192.168.0.3 10
@@ -21,7 +21,7 @@ Starting stack test...
 (UNKNOWN) [192.168.0.2] 23 (?) : Connection timed out
 (UNKNOWN) [192.168.0.2] 443 (?) : Connection refused
 pcap sane 1 1
-pcap bcast 4 0 4 4
+pcap bcast 0 0 0 0
 telnet 0 https 2
 daq-faux-1: ping -c 10 192.168.0.2 10
 daq-faux-1: ping -c 10 192.168.0.3 10
@@ -36,7 +36,7 @@ Starting stack test...
 (UNKNOWN) [192.168.0.2] 23 (?) : Connection timed out
 (UNKNOWN) [192.168.0.2] 443 (?) : Connection refused
 pcap sane 1 1
-pcap bcast 4 0 4 4
+pcap bcast 0 0 0 0
 telnet 0 https 2
 daq-faux-1: ping -c 10 192.168.0.2 10
 daq-faux-1: ping -c 10 192.168.0.3 10
@@ -52,7 +52,7 @@ Starting stack test...
 (UNKNOWN) [192.168.0.2] 23 (?) : Connection timed out
 (UNKNOWN) [192.168.0.2] 443 (?) : Connection timed out
 pcap sane 0 1
-pcap bcast 13 0 0 15
+pcap bcast 1 0 -1 1
 telnet 0 https 0
 daq-faux-1: ping -c 10 192.168.0.2 0
 daq-faux-1: ping -c 10 192.168.0.3 0
@@ -67,7 +67,7 @@ Starting stack test...
 (UNKNOWN) [192.168.0.2] 23 (?) : Connection timed out
 (UNKNOWN) [192.168.0.2] 443 (?) : Connection refused
 pcap sane 1 1
-pcap bcast 4 0 4 4
+pcap bcast 0 0 0 0
 telnet 0 https 2
 daq-faux-1: ping -c 10 192.168.0.2 10
 daq-faux-1: ping -c 10 192.168.0.3 10
