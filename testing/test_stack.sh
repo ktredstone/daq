@@ -56,7 +56,7 @@ function test_stack {
     echo Restarting faucet to force cold start...
     docker restart daq-faucet-1
 
-    ip link  | fgrep t1sw | fgrep M-DOWN | sed -e 's/>.*//' | tee -a $TEST_RESULTS
+    ip link  | fgrep t1sw | fgrep M-DOWN | sed -e 's/.*:(.*):.*/$1/' | tee -a $TEST_RESULTS
 
     echo Waiting for network stability...
     sleep 15
