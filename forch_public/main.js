@@ -51,25 +51,25 @@ function find_t2_switches(switch_names) {
 }
 
 function render_t1_switches(switch_left, switch_right) {
-  const temp = document.getElementById('switch_dist_row_template');
-  const table_row_html = temp.innerHTML;
+  const template = document.getElementById('switch_dist_row_template');
+  const table_row_html = template.innerHTML;
   const table_row = eval('`' + table_row_html + '`');
-  const tbody_holder = document.createElement('tbody');
+  const target_element = document.querySelector('#switch_table tbody');
+  const tbody_holder = document.createElement(target_element.tagName)
   tbody_holder.innerHTML = table_row;
-  const table_element = document.querySelector('#switch_table tbody');
   const row_element = tbody_holder.firstElementChild;
-  table_element.appendChild(row_element);
+  target_element.appendChild(row_element);
 }
 
 function render_t2_switch(switch_name) {
-  const temp = document.getElementById('switch_access_row_template');
-  const table_row_html = temp.innerHTML;
+  const template = document.getElementById('switch_access_row_template');
+  const table_row_html = template.innerHTML;
   const table_row = eval('`' + table_row_html + '`');
-  const tbody_holder = document.createElement('tbody');
+  const target_element = document.querySelector('#switch_table tbody');
+  const tbody_holder = document.createElement(target_element.tagName)
   tbody_holder.innerHTML = table_row;
-  const table_element = document.querySelector('#switch_table tbody');
   const row_element = tbody_holder.firstElementChild;
-  table_element.appendChild(row_element);
+  target_element.appendChild(row_element);
 }
 
 function populate_table() {
