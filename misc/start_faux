@@ -25,11 +25,44 @@ else
     exit 1
 fi
 
+set_mac_addrs () {
+  echo Setting alternate mac $1 on $intf_name
+  ip link set addr $1 dev $intf_name
+}
+
+set_passwd () {
+  echo $1 | chpasswd
+}
+
 # Setup change-of-mac address for macoui testing.
 if [ -n "${options[macoui]}" ]; then
     new_mac=3c:5a:b4:1e:8f:0a
-    echo Setting alternate mac $new_mac on $intf_name
-    ip link set addr $new_mac dev $intf_name
+    set_mac_addrs $new_mac
+fi
+
+if [ -n "${options[passwordpass]}" ]; then
+    new_mac=3c:5a:b4:1e:8f:0b
+    set_mac_addrs $new_mac
+    set_passwd 'root:pass'
+    mv /root/nginx_files/.htpasswdpass /etc/nginx/.htpasswd
+    /etc/init.d/openbsd-inetd restart
+    /etc/init.d/xinetd restart
+    /usr/sbin/sshd -D &
+    service ssh start
+
+fi
+
+if [ -n "${options[passwordfail]}" ]; then
+    set_passwd 'root:redstone'
+    echo "pass\npass\n\n\n\n\n\ny\n" | adduser "admin"
+    echo "admin:redstone" | chpasswd
+    mv /root/nginx_files/.htpasswdfail /etc/nginx/.htpasswd
+    /etc/init.d/openbsd-inetd restart
+    /etc/init.d/xinetd restart
+    /usr/sbin/sshd -D &
+    service ssh start
+
+
 fi
 
 # To capture all the data in/out of the faux device for debugging, uncomment
@@ -111,11 +144,13 @@ if [ -n "${options[tls]}" ]; then
     echo Generating tls certs.
     python tlsfaux/generate_certs.py
     echo Starting tls server on port 443 https.
-    python tlsfaux/server.py certs &
+    mv /root/nginx/nginxpass.conf /etc/nginx/nginx.conf
 elif [ -n "${options[expiredtls]}" ]; then
     echo Starting expired tls server on port 443 https.
-    python tlsfaux/server.py expcerts &
+    mv /root/nginx/nginxfail.conf /etc/nginx/nginx.conf
 fi
+
+service nginx start
 
 if [ -n "${options[pubber]}" ]; then
     echo Running cloud pubber tool...

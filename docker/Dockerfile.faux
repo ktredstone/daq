@@ -23,8 +23,11 @@ FROM daq/aardvark:latest
 # Run this separately so it can be shared with other builds.
 RUN $AG update && $AG install openjdk-8-jre
 RUN $AG update && $AG install openjdk-8-jdk git
+RUN $AG update && $AG install curl
 RUN $AG update && $AG install isc-dhcp-client ethtool network-manager netcat curl\
     python ifupdown openssl ssh nano
+
+
 
 # Prefetch resolvconf to dynamically install at runtime in start_faux.
 RUN $AG update && cd /tmp && ln -s ~/bin bin && $AG download resolvconf && mv resolvconf_*.deb ~
@@ -44,6 +47,34 @@ COPY subset/bacnet/bacnetTests/ bacnetTests
 COPY subset/bacnet/bacnetTests/src/main/resources/Faux*.json tmp/
 COPY --from=java_build /root/bacnet4j/bacnet4j-1.0-SNAPSHOT-all.jar bacnetTests/libs/
 RUN cd bacnetTests && ./gradlew build
+
+#Telnet dependancy
+RUN $AG update && $AG install -y telnetd
+RUN $AG update && $AG install xinetd
+RUN service xinetd start
+
+#SSH dependancy
+COPY subset/security/ssh.config ssh.config
+RUN cat ssh.config >> /etc/ssh/sshd_config
+
+#HTTP/HTTPS dependancy
+RUN $AG update && $AG install nginx
+COPY /subset/security/.htpasswd /etc/nginx/
+RUN mkdir /root/nginx_files
+COPY /subset/security/.htpasswdpass /root/nginx_files
+COPY /subset/security/.htpasswdfail /root/nginx_files
+COPY /subset/security/nginxpass.conf /root/nginx
+COPY /subset/security/nginxfail.conf /root/nginx
+COPY /subset/security/nginx.conf /etc/nginx/
+COPY /subset/security/nginx-site /var/www/nginx-site
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+#SSH Expose SSH Port 22 and Telnet Port 23 and Http Port 80 and Https Port 443
+EXPOSE 22 23 80 443
 
 COPY misc/start_faux misc/failing bin/
 
