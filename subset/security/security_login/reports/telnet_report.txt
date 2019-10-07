@@ -1,0 +1,6 @@
+Login attempt: 0
+Login attempt: 1
+Login attempt: 2
+Login attempt: 3
+Login attempt: 4
+RESULT security.login pass Device has configured a login trap 
