@@ -1,0 +1,21 @@
+!#bin/bash -e 
+
+source reporting_utils
+REPORT=./reports/report.txt
+TEST_NAME=""
+TEST_DESC="Verify all default password have been updated. Ensure new Google provided passwords are set"
+
+if [-n "TARGET_IP"]; then 
+	echo Using the host address from $TARGET_IP and mac address $TARGET_MAC
+	
+	java -jar login_test/build/libs/login_test-1.0-SNAPSHOT-all.jar $TARGET_IP 23 telnet
+	write_out_result $REPORT \
+		"security.login.telnet" \
+		"$TEST_DESC" \
+		"Redacted Log" \ 
+		"$(cat ./reports/telnet_report.txt)"
+	
+	cp -r ./reports/report.txt /tmp/report.txt
+else
+	echo Wrong parametres Password test failed | tee /tmp/report.txt
+fi
