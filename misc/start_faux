@@ -89,6 +89,19 @@ elif [ -n "${options[bacnetfail]}" ]; then
          FauxDeviceEngine.EntryPoint $local_ip $broadcast_ip "Faux-Device-Fail.json"  &
 fi
 
+if [-n "{options[loginpass]}"]; then
+   echo "pass\npass\n\n\n\n\n\ny\n" | adduser "admin"
+   /etc/init.d/openbsd-inetd restart
+   /etc/init.d/xinetd restart
+
+if [ -n "{options[loginfail]}"]; then
+   echo increasing login retries to 10000
+   echo "pass\npass\n\n\n\n\n\ny\n" | adduser "admin"
+   /etc/init.d/openbsd-inetd restart
+   /etc/init.d/xinetd restart
+   echo "LOGIN_RETRIES		10000" >> /etc/login.defs
+fi
+
 if [ -n "${options[discover]}" ]; then
     echo Starting bacnet discover loop.
     bin/bacnet_discover loop &
