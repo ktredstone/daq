@@ -3,7 +3,7 @@ public class Main {
 
         if (args.length != 5) {
             throw new IllegalArgumentException(
-                    "Usage: target_ip protocol(ssh/telnet) target_port target_mac domain");
+                    "Usage: target_ip protocol(http(s)/ssh/telnet) target_port target_mac domain");
         }
 
         String host = args[0];
