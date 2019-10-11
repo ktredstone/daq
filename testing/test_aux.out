@@ -34,7 +34,7 @@ RESULT pass security.passwords Default passwords have been changed
 RESULT pass security.passwords Default passwords have been changed
 RESULT fail security.passwords Default password has not been changed
 RESULT fail security.passwords Default password has not been changed
-RESULT fail security.passwords Default password has not been changed
+RESULT pass security.passwords Default passwords have been changed
 RESULT fail security.passwords Default passwords have not been changed
 RESULT skip security.firmware Could not retrieve a firmware version with nmap.
 RESULT pass security.firmware version found: ?\xFF\xFF\x19,>u\x08\x00no
