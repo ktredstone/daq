@@ -11,8 +11,8 @@
 
 | Test             |                        |
 |------------------|------------------------|
-| Test report start date | 2019-10-07 14:19:32+00:00 |
-| Test report end date   | 2019-10-07 14:27:20+00:00 |
+| Test report start date | 2019-10-11 10:20:24+00:00 |
+| Test report end date   | 2019-10-11 10:27:15+00:00 |
 | DAQ version      | 1.0.1 |
 | Attempt number   | 1 |
 
@@ -86,9 +86,9 @@ Overall device result FAIL
 
 ```
 Baseline ping test report
-%% 80 packets captured.
+%% 68 packets captured.
 RESULT skip base.switch.ping
-RESULT pass base.target.ping target %% 10.20.39.164
+RESULT pass base.target.ping target %% 10.20.98.164
 ```
 
 ## Module nmap
@@ -206,7 +206,7 @@ security.passwords.http
 --------------------
 Verify all default password have been updated. Ensure new Google provided passwords are set
 --------------------
-Redacted lOG
+Redacted Log
 --------------------
 RESULT skip security.passwords Device does not have a valid mac address
 
@@ -215,7 +215,7 @@ security.passwords.https
 --------------------
 Verify all default password have been updated. Ensure new Google provided passwords are set
 --------------------
-Redacted lOG
+Redacted Log
 --------------------
 RESULT skip security.passwords Device does not have a valid mac address
 
@@ -224,7 +224,7 @@ security.passwords.telnet
 --------------------
 Verify all default password have been updated. Ensure new Google provided passwords are set
 --------------------
-Redacted lOG
+Redacted Log
 --------------------
 RESULT skip security.passwords Device does not have a valid mac address
 
@@ -233,7 +233,7 @@ security.passwords.ssh
 --------------------
 Verify all default password have been updated. Ensure new Google provided passwords are set
 --------------------
-Redacted lOG
+Redacted Log
 --------------------
 RESULT skip security.passwords Device does not have a valid mac address
 
