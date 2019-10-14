@@ -11,8 +11,8 @@
 
 | Test             |                        |
 |------------------|------------------------|
-| Test report start date | 2019-10-11 11:54:00+00:00 |
-| Test report end date   | 2019-10-11 12:01:41+00:00 |
+| Test report start date | 2019-10-14 14:25:45+00:00 |
+| Test report end date   | 2019-10-14 14:33:27+00:00 |
 | DAQ version      | 1.0.1 |
 | Attempt number   | 1 |
 
@@ -74,7 +74,10 @@ Overall device result FAIL
 |skip|protocol.bacnet.pic|Other|Other|Bacnet device not found... Pics check cannot be performed.|
 |skip|protocol.bacnet.version|Other|Other|Bacnet device not found.|
 |skip|security.firmware|Other|Other|Could not retrieve a firmware version with nmap.|
-|skip|security.passwords|Other|Other|Device does not have a valid mac address|
+|skip|security.passwords.http|Other|Other|Device does not have a valid mac address|
+|skip|security.passwords.https|Other|Other|Device does not have a valid mac address|
+|skip|security.passwords.ssh|Other|Other|Device does not have a valid mac address|
+|skip|security.passwords.telnet|Other|Other|Device does not have a valid mac address|
 |fail|security.ports.nmap|Security|Recommended||
 |pass|security.tls.v3|Other|Other||
 |pass|security.x509|Other|Other||
@@ -88,7 +91,7 @@ Overall device result FAIL
 Baseline ping test report
 %% 73 packets captured.
 RESULT skip base.switch.ping
-RESULT pass base.target.ping target %% 10.20.48.164
+RESULT pass base.target.ping target %% 10.20.24.164
 ```
 
 ## Module nmap
@@ -208,7 +211,7 @@ Verify all default password have been updated. Ensure new Google provided passwo
 --------------------
 Redacted Log
 --------------------
-RESULT skip security.passwords Device does not have a valid mac address
+RESULT skip security.passwords.http Device does not have a valid mac address
 
 --------------------
 security.passwords.https
@@ -217,7 +220,7 @@ Verify all default password have been updated. Ensure new Google provided passwo
 --------------------
 Redacted Log
 --------------------
-RESULT skip security.passwords Device does not have a valid mac address
+RESULT skip security.passwords.https Device does not have a valid mac address
 
 --------------------
 security.passwords.telnet
@@ -226,7 +229,7 @@ Verify all default password have been updated. Ensure new Google provided passwo
 --------------------
 Redacted Log
 --------------------
-RESULT skip security.passwords Device does not have a valid mac address
+RESULT skip security.passwords.telnet Device does not have a valid mac address
 
 --------------------
 security.passwords.ssh
@@ -235,7 +238,7 @@ Verify all default password have been updated. Ensure new Google provided passwo
 --------------------
 Redacted Log
 --------------------
-RESULT skip security.passwords Device does not have a valid mac address
+RESULT skip security.passwords.ssh Device does not have a valid mac address
 
 ```
 
