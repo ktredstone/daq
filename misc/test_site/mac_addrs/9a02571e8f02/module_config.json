@@ -10,18 +10,20 @@
     "version": "*** Version ***",
     "firmware_version": "*** Firmware Version ***"
   },
-  "device_type": "rocket", 
+  "device_type": "rocket",
   "device_id": "AHU-1",
   "modules": {
     "foobar": {
       "enabled": false
     }
   },
-  "ports": {
+  "servers":{
     "tcp": {
-      "443": {
-        "allowed": true,
-        "reason": "Administrative Web-Server"
+      "ports":{
+        "443": {
+          "allowed": true,
+          "reason": "Administrative Web-Server"
+        }
       }
     }
   }
