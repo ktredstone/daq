@@ -58,7 +58,7 @@ public class SetupTest {
       getJsonFile(formattedMac);
     } catch (Exception e) {
       reportHandler.addText(
-          "RESULT skip security.passwords Device does not have a valid mac address");
+          "RESULT skip security.passwords."+ protocol +" Device does not have a valid mac address");
       reportHandler.writeReport();
     }
   }
@@ -95,7 +95,6 @@ public class SetupTest {
   }
 
   private void createConsoleCommand(String[] usernames, String[] passwords) {
-    System.out.println("writing command");
     ArrayList<String> usernamesList = new ArrayList<>(Arrays.asList(usernames));
     ArrayList<String> passwordsList = new ArrayList<>(Arrays.asList(passwords));
     String command;
@@ -112,8 +111,6 @@ public class SetupTest {
 
     StringBuilder str = new StringBuilder(command);
 
-    System.out.println("Num of usernames= " + usernamesList.size());
-    System.out.println("Num of passwords= " + passwordsList.size());
     for (String username : usernamesList) {
       if (usernamesList.indexOf(username) != (usernamesList.size() - 1)) {
         str.append(username + ",");
@@ -132,6 +129,6 @@ public class SetupTest {
     String finalCommand = str.toString();
     RunTest runnable = new RunTest(reportHandler);
     System.out.println("command is : " + finalCommand);
-    runnable.runCommand(finalCommand);
+    runnable.runCommand(finalCommand, protocol);
   }
 }

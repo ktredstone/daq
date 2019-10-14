@@ -40,7 +40,7 @@ public class RunSshTest implements Runnable {
       }
       if (usernameIndex > usernames.length - 1) {
         testFinished = true;
-        reportHandler.addText("RESULT pass security.passwords Default passwords have been changed");
+        reportHandler.addText("RESULT pass security.passwords.ssh Default passwords have been changed");
       } else {
         attempts++;
         try {
@@ -52,12 +52,12 @@ public class RunSshTest implements Runnable {
             session.setConfig(config);
             session.connect();
             reportHandler.addText(
-                "RESULT fail security.passwords Default passwords have not been changed");
+                "RESULT fail security.passwords.ssh Default passwords have not been changed");
             testFinished = true;
           } catch (JSchException e) {
             if (e.toString().contains("Connection refused")) {
               reportHandler.addText(
-                  "RESULT skip security.passwords SSH is not enabled on selected device");
+                  "RESULT skip security.passwords.ssh SSH is not enabled on selected device");
               testFinished = true;
               break;
             } else {

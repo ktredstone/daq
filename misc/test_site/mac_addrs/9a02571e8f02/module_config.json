@@ -17,14 +17,12 @@
       "enabled": false
     }
   },
-  "servers":{
+  "ports":{
     "tcp": {
-      "ports":{
-        "443": {
-          "allowed": true,
-          "reason": "Administrative Web-Server"
-        }
-      }
+      "443": {
+        "allowed": true,
+        "reason": "Administrative Web-Server"
+       }
     }
   }
 }

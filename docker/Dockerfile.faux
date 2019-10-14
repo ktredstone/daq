@@ -74,7 +74,6 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 #SSH Expose SSH Port 22 and Telnet Port 23 and Http Port 80 and Https Port 443
-EXPOSE 22 23 80 443
 
 COPY misc/start_faux misc/failing bin/
 
