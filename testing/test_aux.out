@@ -24,18 +24,18 @@ RESULT pass security.tls.v3
 RESULT pass security.x509
 RESULT pass security.tls.v3
 RESULT pass security.x509
-RESULT skip security.passwords Device does not have a valid mac address
-RESULT skip security.passwords Device does not have a valid mac address
-RESULT skip security.passwords Device does not have a valid mac address
-RESULT skip security.passwords Device does not have a valid mac address
-RESULT pass security.passwords Default passwords have been changed
-RESULT pass security.passwords Default passwords have been changed
-RESULT pass security.passwords Default passwords have been changed
-RESULT pass security.passwords Default passwords have been changed
-RESULT fail security.passwords Default password has not been changed
-RESULT fail security.passwords Default password has not been changed
-RESULT fail security.passwords Default password has not been changed
-RESULT fail security.passwords Default passwords have not been changed
+RESULT skip security.passwords.http Device does not have a valid mac address
+RESULT skip security.passwords.https Device does not have a valid mac address
+RESULT skip security.passwords.telnet Device does not have a valid mac address
+RESULT skip security.passwords.ssh Device does not have a valid mac address
+RESULT pass security.passwords.http  Default passwords have been changed
+RESULT pass security.passwords.https  Default passwords have been changed
+RESULT pass security.passwords.telnet  Default passwords have been changed
+RESULT pass security.passwords.ssh Default passwords have been changed
+RESULT fail security.passwords.http Default passwords has not been changed
+RESULT fail security.passwords.https Default passwords has not been changed
+RESULT fail security.passwords.telnet Default passwords has not been changed
+RESULT fail security.passwords.ssh Default passwords have not been changed
 RESULT skip security.firmware Could not retrieve a firmware version with nmap.
 RESULT pass security.firmware version found: ?\xFF\xFF\x19,>u\x08\x00no
 dhcp requests 2 1
