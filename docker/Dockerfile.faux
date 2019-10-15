@@ -25,9 +25,7 @@ RUN $AG update && $AG install openjdk-8-jre
 RUN $AG update && $AG install openjdk-8-jdk git
 RUN $AG update && $AG install curl
 RUN $AG update && $AG install isc-dhcp-client ethtool network-manager netcat curl\
-    python ifupdown openssl ssh nano
-
-
+    python ifupdown openssl ssh nano apache2-utils
 
 # Prefetch resolvconf to dynamically install at runtime in start_faux.
 RUN $AG update && cd /tmp && ln -s ~/bin bin && $AG download resolvconf && mv resolvconf_*.deb ~
@@ -59,13 +57,8 @@ RUN cat ssh.config >> /etc/ssh/sshd_config
 
 #HTTP/HTTPS dependancy
 RUN $AG update && $AG install nginx
-COPY /subset/security/.htpasswd /etc/nginx/
-RUN mkdir /root/nginx_files
-COPY /subset/security/.htpasswdpass /root/nginx_files
-COPY /subset/security/.htpasswdfail /root/nginx_files
-COPY /subset/security/nginxpass.conf /root/nginx
-COPY /subset/security/nginxfail.conf /root/nginx
-COPY /subset/security/nginx.conf /etc/nginx/
+COPY /subset/security/nginxpass.conf /root/nginx/
+COPY /subset/security/nginxfail.conf /root/nginx/
 COPY /subset/security/nginx-site /var/www/nginx-site
 
 # SSH login fix. Otherwise user is kicked off after login

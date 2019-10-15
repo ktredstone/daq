@@ -26,8 +26,8 @@ public class ReportHandler {
         writer.write(report);
       }
     } catch (IOException e) {
-      System.out.println("Unable to write report");
-      System.out.println(e);
+      System.err.println("Unable to write report");
+      System.out.println(e.getMessage());
     }
   }
 }

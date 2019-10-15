@@ -41,10 +41,8 @@ if [ -n "${options[macoui]}" ]; then
 fi
 
 if [ -n "${options[passwordpass]}" ]; then
-    new_mac=3c:5a:b4:1e:8f:0b
-    set_mac_addrs $new_mac
     set_passwd 'root:pass'
-    mv /root/nginx_files/.htpasswdpass /etc/nginx/.htpasswd
+    htpasswd -b -c /etc/nginx/.htpasswd admin fail
     /etc/init.d/openbsd-inetd restart
     /etc/init.d/xinetd restart
     /usr/sbin/sshd -D &
@@ -53,10 +51,12 @@ if [ -n "${options[passwordpass]}" ]; then
 fi
 
 if [ -n "${options[passwordfail]}" ]; then
+    new_mac=3c:5a:b4:1e:8f:0b
+    set_mac_addrs $new_mac
     set_passwd 'root:redstone'
     echo "pass\npass\n\n\n\n\n\ny\n" | adduser "admin"
     echo "admin:redstone" | chpasswd
-    mv /root/nginx_files/.htpasswdfail /etc/nginx/.htpasswd
+    htpasswd -b -c /etc/nginx/.htpasswd admin redstone
     /etc/init.d/openbsd-inetd restart
     /etc/init.d/xinetd restart
     /usr/sbin/sshd -D &
@@ -145,12 +145,12 @@ if [ -n "${options[tls]}" ]; then
     python tlsfaux/generate_certs.py
     echo Starting tls server on port 443 https.
     mv /root/nginx/nginxpass.conf /etc/nginx/nginx.conf
+    service nginx start
 elif [ -n "${options[expiredtls]}" ]; then
     echo Starting expired tls server on port 443 https.
     mv /root/nginx/nginxfail.conf /etc/nginx/nginx.conf
+    service nginx start
 fi
-
-service nginx start
 
 if [ -n "${options[pubber]}" ]; then
     echo Running cloud pubber tool...
