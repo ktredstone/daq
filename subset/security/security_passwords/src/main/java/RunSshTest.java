@@ -2,16 +2,15 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-
-import java.util.Properties;
+import java.util.*;
 
 public class RunSshTest implements Runnable {
   private ReportHandler reportHandler;
   private Session session;
   Channel channel;
   private JSch jsch = new JSch();
-  private String[] usernames;
-  private String[] passwords;
+  private ArrayList<String>  usernames = new ArrayList<String>();
+  private ArrayList<String> passwords = new ArrayList<String>();
   private String hostAddress;
   private int port;
   private boolean testFinished = false;
@@ -20,8 +19,8 @@ public class RunSshTest implements Runnable {
   private int attempts = -1;
 
   public RunSshTest(
-      String[] usernames,
-      String[] passwords,
+      ArrayList<String> usernames,
+      ArrayList<String> passwords,
       String hostAddress,
       String port,
       ReportHandler reportHandler) {
@@ -34,18 +33,18 @@ public class RunSshTest implements Runnable {
 
   public void StartTest() {
     while (!testFinished) {
-      if (passwordIndex == passwords.length) {
+      if (passwordIndex == passwords.size()) {
         usernameIndex++;
         passwordIndex = 0;
       }
-      if (usernameIndex > usernames.length - 1) {
+      if (usernameIndex > usernames.size() - 1) {
         testFinished = true;
         reportHandler.addText("RESULT pass security.passwords.ssh Default passwords have been changed");
       } else {
         attempts++;
         try {
-          session = jsch.getSession(usernames[usernameIndex], hostAddress, port);
-          session.setPassword(passwords[passwordIndex]);
+          session = jsch.getSession(usernames.get(usernameIndex), hostAddress, port);
+          session.setPassword(passwords.get(passwordIndex));
           try {
             Properties config = new Properties();
             config.put("StrictHostKeyChecking", "no");

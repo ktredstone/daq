@@ -1,14 +1,11 @@
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SetupTest {
   String protocol;
@@ -57,6 +54,7 @@ public class SetupTest {
       formattedMac = macAddress.substring(addressStartPosition, addressEndPosition).toUpperCase();
       getJsonFile(formattedMac);
     } catch (Exception e) {
+      System.err.println(e.getMessage());
       reportHandler.addText(
           "RESULT skip security.passwords."+ protocol +" Device does not have a valid mac address");
       reportHandler.writeReport();
@@ -67,17 +65,23 @@ public class SetupTest {
     JsonObject jsonFileContents =
         gsonController.fromJson(new InputStreamReader(jsonStream), JsonObject.class);
     JsonObject manufacturer = jsonFileContents.getAsJsonObject(macAddress);
-    String jsonUsernames = manufacturer.get("Usernames").getAsString();
-    String jsonPasswords = manufacturer.get("Passwords").getAsString();
-    usernames = jsonUsernames.split(",");
-    passwords = jsonPasswords.split(",");
+    JsonArray userArray = manufacturer.getAsJsonArray("Usernames");
+    JsonArray passwordArray = manufacturer.getAsJsonArray("Passwords");
+    ArrayList<String> usernameList = new ArrayList<String>();
+    ArrayList<String> passwordList = new ArrayList<String>();
+    for (int i = 0; i < passwordArray.size(); i++){
+      passwordList.add(passwordArray.get(i).getAsString());
+    }
+    for (int i = 0; i < userArray.size(); i++){
+      usernameList.add(userArray.get(i).getAsString());
+    }
     if (protocol.equals("ssh")) {
       RunSshTest runSshTest =
-          new RunSshTest(usernames, passwords, hostAddress, port, reportHandler);
+          new RunSshTest(usernameList, passwordList, hostAddress, port, reportHandler);
       Thread sshThread = new Thread(runSshTest);
       sshThread.start();
     } else {
-      createConsoleCommand(usernames, passwords);
+      createConsoleCommand(usernameList, passwordList);
     }
   }
 
@@ -94,9 +98,8 @@ public class SetupTest {
     getMacAddress();
   }
 
-  private void createConsoleCommand(String[] usernames, String[] passwords) {
-    ArrayList<String> usernamesList = new ArrayList<>(Arrays.asList(usernames));
-    ArrayList<String> passwordsList = new ArrayList<>(Arrays.asList(passwords));
+  private void createConsoleCommand(ArrayList<String> usernameList, ArrayList<String> passwordList) {
+
     String command;
     command = "ncrack ";
 
@@ -111,15 +114,15 @@ public class SetupTest {
 
     StringBuilder str = new StringBuilder(command);
 
-    for (String username : usernamesList) {
-      if (usernamesList.indexOf(username) != (usernamesList.size() - 1)) {
+    for (String username : usernameList) {
+      if (usernameList.indexOf(username) != (usernameList.size() - 1)) {
         str.append(username + ",");
       } else {
         str.append(username + " --pass ");
       }
     }
-    for (String password : passwords) {
-      if (passwordsList.indexOf(password) != (passwordsList.size() - 1)) {
+    for (String password : passwordList) {
+      if (passwordList.indexOf(password) != (passwordList.size() - 1)) {
         str.append(password + ",");
       } else {
         str.append(password + " ");
