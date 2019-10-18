@@ -11,8 +11,8 @@
 
 | Test             |                        |
 |------------------|------------------------|
-| Test report start date | 2019-10-16 07:46:35+00:00 |
-| Test report end date   | 2019-10-16 07:55:02+00:00 |
+| Test report start date | 2019-10-18 11:25:30+00:00 |
+| Test report end date   | 2019-10-18 11:33:11+00:00 |
 | DAQ version      | 1.0.1 |
 | Attempt number   | 1 |
 
@@ -89,9 +89,9 @@ Overall device result FAIL
 
 ```
 Baseline ping test report
-%% 79 packets captured.
+%% 73 packets captured.
 RESULT skip base.switch.ping
-RESULT pass base.target.ping target %% 10.20.94.164
+RESULT pass base.target.ping target %% 10.20.29.164
 ```
 
 ## Module nmap
