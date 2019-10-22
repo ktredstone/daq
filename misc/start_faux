@@ -44,7 +44,6 @@ if [ -n "${options[passwordpass]}" ]; then
     set_passwd 'root:pass'
     htpasswd -b -c /etc/nginx/.htpasswd admin fail
     /etc/init.d/openbsd-inetd restart
-    /etc/init.d/xinetd restart
     /usr/sbin/sshd -D &
     service xinetd start
     service ssh start

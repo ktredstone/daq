@@ -48,7 +48,6 @@ RUN cd bacnetTests && ./gradlew build
 # Telnet dependancy
 RUN $AG update && $AG install -y telnetd
 RUN $AG update && $AG install xinetd
-RUN service xinetd start
 
 # SSH dependancy
 COPY subset/security/ssh_additions.config ssh_additions.config
