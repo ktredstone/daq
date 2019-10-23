@@ -1,0 +1,22 @@
+#!bin/bash -e
+
+source reporting_utils
+REPORT=./reports/report.txt
+TEST_NAME=""
+TEST_DESC="Verify that a login trap is set within the device to prevent multiple login attempts in a single session"
+
+if [-n "TARGET_IP"]; then 
+	echo Using the host address from $TARGET_IP and mac address $TARGET_MAC
+
+	java -jar security_login/build/libs/security_login-1.0-SNAPSHOT-all.jar $TARGET_IP 23 telnet
+	write_out_result $REPORT \
+		"security.login.telnet" \
+		"$TEST_DESC" \
+		"Redacted Log" \ 
+		"$(cat ./reports/telnet_report.txt)"
+
+	cp -r ./reports/report.txt /tmp/report.txt
+else
+	echo Wrong parametres Password test failed | tee /tmp/report.txt
+fi
+

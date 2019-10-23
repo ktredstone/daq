@@ -92,6 +92,7 @@ capture_aux_test_log brute all
 capture_aux_test_log macoui all
 capture_aux_test_log tls all
 capture_aux_test_log password all
+capture_aux_test_log login all
 capture_aux_test_log discover all
 
 # Capture peripheral logs
@@ -108,6 +109,7 @@ more inst/run-port-*/nodes/brute*/activate.log | cat
 more inst/run-port-*/nodes/macoui*/activate.log | cat
 more inst/run-port-*/nodes/tls*/activate.log | cat
 more inst/run-port-*/nodes/password*/activate.log | cat
+more inst/run-port-*/nodes/login*/activate.log | cat
 more inst/run-port-*/nodes/discover*/activate.log | cat
 more inst/run-port-*/nodes/bacext*/activate.log | cat
 ls inst/fail_fail01/ | tee -a $TEST_RESULTS
