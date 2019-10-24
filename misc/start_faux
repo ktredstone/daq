@@ -62,7 +62,10 @@ if [ -n "${options[passwordfail]}" ]; then
     service xinetd start
     service ssh start
 
+fi
 
+if [ -n "${options[loginfail]}" ]; then
+    echo "LOGIN_RETRIES         100" >> /etc/login.defs
 fi
 
 # To capture all the data in/out of the faux device for debugging, uncomment
