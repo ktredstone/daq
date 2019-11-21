@@ -1,7 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,16 +48,22 @@ public class SetupTest {
 
   private void getMacAddress() {
     String formattedMac;
-    try {
       macAddress = macAddress.replace(":", "");
       formattedMac = macAddress.substring(addressStartPosition, addressEndPosition).toUpperCase();
-      getJsonFile(formattedMac);
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
-      reportHandler.addText(
-          "RESULT skip security.passwords."+ protocol +" Device does not have a valid mac address");
-      reportHandler.writeReport();
-    }
+      if (macDevices.containsKey(formattedMac)){
+        try {
+          getJsonFile(formattedMac);
+        }
+        catch(NullPointerException e){
+          System.err.println(e.getMessage());
+          reportHandler.addText("RESULT skip security.passwords."+ protocol +" Devices default usernames and passwords have not been implemented yet");
+          reportHandler.writeReport();
+        }
+      }
+      else {
+        reportHandler.addText("RESULT skip security.passwords."+ protocol +" Device does not have a valid mac address");
+        reportHandler.writeReport();
+      }
   }
 
   public void getJsonFile(String macAddress) {
